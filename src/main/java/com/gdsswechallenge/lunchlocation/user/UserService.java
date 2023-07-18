@@ -1,15 +1,28 @@
 package com.gdsswechallenge.lunchlocation.user;
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 public class UserService {
 
-    public List<User> getUsers() {
-              return List.of(new User("alpha", "alpha3423"),
-                new User("beta", "beta54216"));
+    private final UserRepository userRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
 
     }
+
+    public void saveUser(User user) {
+        userRepository.save(user);
+
+    }
+
 }
