@@ -22,11 +22,11 @@ public class LunchlocationApplication {
             User user = new User("John doe", "johnydo88");
 
 
-            repository.findUserByUsername(user.getUsername()).ifPresentOrElse(u -> {
-                System.out.println(u + " already exist");
-            }, () -> {
-                repository.insert(user);
-            });
+//            repository.findByEmail(user.getUsername()).ifPresentOrElse(u -> {
+//                System.out.println(u + " already exist");
+//            }, () -> {
+//                repository.insert(user);
+//            });
         };
     }
 
