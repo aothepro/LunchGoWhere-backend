@@ -13,7 +13,7 @@ public class SessionService {
 
 
     public List<Session> getAllActiveSessions() {
-        return sessionRepository.findByIsActiveTrue();
+        return sessionRepository.findByActiveTrue();
 
     }
 

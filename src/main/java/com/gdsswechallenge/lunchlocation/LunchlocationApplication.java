@@ -6,7 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class LunchlocationApplication {
@@ -16,17 +16,22 @@ public class LunchlocationApplication {
     }
 
     @Bean
-    CommandLineRunner runner(UserRepository repository, MongoTemplate mongoTemplate) {
-        // Initialize some users
+    CommandLineRunner runner(UserRepository repository, PasswordEncoder passwordEncoder) {
+        repository.deleteAll();
+        // Initialize tester users
         return args -> {
-            User user = new User("John doe", "johnydo88");
+            User user =  User.builder()
+                    .name("testUserName")
+                    .username("tester")
+                    .password(passwordEncoder.encode("tester"))
+                    .build();
 
 
-//            repository.findByEmail(user.getUsername()).ifPresentOrElse(u -> {
-//                System.out.println(u + " already exist");
-//            }, () -> {
-//                repository.insert(user);
-//            });
+            repository.findByUsername(user.getUsername()).ifPresentOrElse(u -> {
+                System.out.println(u + " already exist");
+            }, () -> {
+                repository.insert(user);
+            });
         };
     }
 
