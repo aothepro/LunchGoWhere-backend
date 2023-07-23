@@ -17,14 +17,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    public String generateToken(User user){
-        return generateToken(new HashMap<>(), user);
-    }
-
     private static final String SECRET_KEY = "90b6da43314a255bea7b891fbd90adbdfa157bd61a30806952c2a3260a34ba30"; // TODO: Use a secure key here
-    public String extractUserId(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
 
     public static String generateToken(Map<String, Object> extraClaims, User user) {
 
@@ -37,6 +30,19 @@ public class JwtService {
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
 
+    }
+
+    private static Key getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String generateToken(User user) {
+        return generateToken(new HashMap<>(), user);
+    }
+
+    public String extractUserId(String token) {
+        return extractClaim(token, Claims::getSubject);
     }
 
     public boolean isTokenValid(String token, User user) {
@@ -52,8 +58,8 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public <T>T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token.startsWith("Bearer ") ? token.substring(7) : token);
         return claimsResolver.apply(claims);
     }
 
@@ -62,11 +68,6 @@ public class JwtService {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-    }
-
-    private static Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
     }
 
 

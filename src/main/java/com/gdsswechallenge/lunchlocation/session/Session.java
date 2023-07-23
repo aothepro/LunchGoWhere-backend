@@ -1,6 +1,7 @@
 package com.gdsswechallenge.lunchlocation.session;
 
 
+import com.mongodb.lang.NonNull;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -17,6 +18,7 @@ public class Session {
     private String id;
     private String name;
     private LocalDateTime lunchDate;
+    @NonNull
     private String creatorId;
     @Indexed
     private boolean isActive = true;

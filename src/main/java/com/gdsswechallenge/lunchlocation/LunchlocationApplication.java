@@ -1,5 +1,6 @@
 package com.gdsswechallenge.lunchlocation;
 
+import com.gdsswechallenge.lunchlocation.session.SessionRepository;
 import com.gdsswechallenge.lunchlocation.user.User;
 import com.gdsswechallenge.lunchlocation.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -16,8 +17,9 @@ public class LunchlocationApplication {
     }
 
     @Bean
-    CommandLineRunner runner(UserRepository repository, PasswordEncoder passwordEncoder) {
+    CommandLineRunner runner(UserRepository repository, PasswordEncoder passwordEncoder, SessionRepository sessionRepository) {
         repository.deleteAll();
+        sessionRepository.deleteAll();
         // Initialize tester users
         return args -> {
             User user =  User.builder()
