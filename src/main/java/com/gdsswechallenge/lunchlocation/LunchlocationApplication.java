@@ -19,7 +19,7 @@ public class LunchlocationApplication {
     @Bean
     CommandLineRunner runner(UserRepository repository, PasswordEncoder passwordEncoder, SessionRepository sessionRepository) {
         repository.deleteAll();
-        sessionRepository.deleteAll();
+//        sessionRepository.deleteAll();
         // Initialize tester users
         return args -> {
             User user =  User.builder()

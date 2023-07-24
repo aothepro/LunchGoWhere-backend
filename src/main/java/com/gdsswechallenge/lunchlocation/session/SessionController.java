@@ -17,11 +17,15 @@ public class SessionController {
 
     @GetMapping
     public ResponseEntity<List<Session>> getActiveSessions() {
+
+        // Fix this method -> not working when using postman
         return ResponseEntity.ok(sessionService.getAllActiveSessions());
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> createSession(@RequestHeader(name = "Authorization") String token, @RequestBody SessionCreationRequest sessionCreationRequest) {
+
+        String creatorId = jwtService.extractUserId(token);
         if (sessionCreationRequest.getName() == null) {
             return ResponseEntity.badRequest().body("Missing Session name");
         }
@@ -29,8 +33,8 @@ public class SessionController {
             return ResponseEntity.badRequest().body("Missing date for lunch session");
         }
 
-        Session createdSession = sessionService.createSession(Session.builder().name(sessionCreationRequest.getName()).creatorId(jwtService.extractUserId(token)).lunchDate(sessionCreationRequest.getLunchDate()).build());
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdSession);
+        Session createdSession = sessionService.createSession(sessionCreationRequest.getName(), sessionCreationRequest.getLunchDate(), creatorId);
 
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdSession);
     }
 }
