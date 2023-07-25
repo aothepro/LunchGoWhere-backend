@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/session")
@@ -34,5 +35,16 @@ public class SessionController {
         Session createdSession = sessionService.createSession(sessionCreationRequest.getName(), sessionCreationRequest.getLunchDate(), creatorId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSession);
+    }
+
+    @PostMapping("/end")
+    public ResponseEntity<?> endSession(@RequestHeader(name = "Authorization") String token, @RequestBody SessionEndRequest sessionEndRequest) {
+        String requesterId = jwtService.extractUserId(token);
+        Optional<Session> session = sessionService.endSessionWithId(sessionEndRequest.getSessionId(), requesterId);
+
+        if (session.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(session.get());
     }
 }

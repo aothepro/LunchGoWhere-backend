@@ -26,6 +26,5 @@ public class VoteController {
            return ResponseEntity.badRequest().build();
        }
         return ResponseEntity.ok().body(vote);
-//
     }
 }
