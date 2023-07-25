@@ -17,8 +17,6 @@ public class SessionController {
 
     @GetMapping
     public ResponseEntity<List<Session>> getActiveSessions() {
-
-        // Fix this method -> not working when using postman
         return ResponseEntity.ok(sessionService.getAllActiveSessions());
     }
 
