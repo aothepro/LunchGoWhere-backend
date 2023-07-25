@@ -29,15 +29,15 @@ For example, to use the `user` object, the path will be:
 
 # session
 
-| Path                    | Method |        Description        | Request |    Response    |
-|:------------------------|--------|:-------------------------:|:-------:|:--------------:|
-| /                       | GET    |     Gets all session      |         | [{id: string}] |
-|                         | POST   |     Create a session      |         |  {id: string}  |
-| /history                | GET    |     Gets all session      |         | [{id: string}] |
-| /{sessionId}            | GET    |  Gets specified session   |         |  {id: string}  |
-| /{sessionId}/end        | PUT    |  Ends an active session   |         |                |
-| /{sessionId}/submission | POST   |   Submits a restaurant    |         |                |
-|                         | PUT    | Updates a submitted entry |         |                |
+| Path                    | Method |        Description        | Request |            Response             |
+|:------------------------|--------|:-------------------------:|:-------:|:-------------------------------:|
+| /                       | GET    |     Gets all session      |         |         [{id: string}]          |
+| /create                 | POST   |     Create a session      |         | {name: string, lunchDate: Date} |
+| /history                | GET    |     Gets all session      |         |         [{id: string}]          |
+| /{sessionId}            | GET    |  Gets specified session   |         |          {id: string}           |
+| /{sessionId}/end        | PUT    |  Ends an active session   |         |                                 |
+| /{sessionId}/submission | POST   |   Submits a restaurant    |         |                                 |
+|                         | PUT    | Updates a submitted entry |         |                                 |
 
 # restaurant
 
