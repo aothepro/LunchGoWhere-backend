@@ -13,8 +13,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final SessionService sessionService;
 
-
-    public Optional<Vote> castVote(String creatorId, String sessionId, String restaurantName) {
+    public Optional<Vote> getVote(String creatorId, String sessionId) {
         Optional<Session> session = sessionService.getSessionById(sessionId);
 
         // Check if use can vote
@@ -23,9 +22,11 @@ public class VoteService {
         }
 
         // Check if user has voted
-        Optional<Vote> vote = voteRepository.findBySessionIdAndVoterId(sessionId, creatorId);
+       return voteRepository.findBySessionIdAndVoterId(sessionId, creatorId);
+    }
 
-
+    public Optional<Vote> castVote(String creatorId, String sessionId, String restaurantName) {
+       Optional<Vote> vote = getVote(creatorId, sessionId);
         if (vote.isEmpty()) {
             // First time user voting for session
             return Optional.of(voteRepository.save(Vote.builder()

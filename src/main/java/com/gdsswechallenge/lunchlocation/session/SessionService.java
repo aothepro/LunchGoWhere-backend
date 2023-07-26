@@ -26,39 +26,45 @@ public class SessionService {
             if (sessionCreator.isEmpty()) {
                 continue;
             }
-            sessionResponses.add(SessionResponse.builder()
-                    .id(session.getId())
-                    .isActive(canAcceptVotes(session))
-                    .name(session.getName())
-                    .creatorName(userRepository.findById(session.getCreatorId()).get().getName())
-                    .lunchDate(session.getLunchDate())
-                    .winningRestaurantName(session.getWinningRestaurantName())
-                    .build());
+            sessionResponses.add(SessionResponse.builder().id(session.getId()).isActive(canAcceptVotes(session)).name(session.getName()).creatorName(userRepository.findById(session.getCreatorId()).get().getName()).lunchDate(session.getLunchDate()).winningRestaurantName(session.getWinningRestaurantName()).build());
         }
-        Collections.sort(sessionResponses, Comparator.comparing(SessionResponse::getLunchDate, (dateTime1, dateTime2) -> {
-                    LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).minusDays(1).plusHours(8);
+        sessionResponses.sort(Comparator.comparing(SessionResponse::getLunchDate, (dateTime1, dateTime2) -> {
+            LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).minusDays(1).plusHours(8);
 
-                    boolean isDateTime1BeforeToday = dateTime1.isBefore(today);
-                    boolean isDateTime2BeforeToday = dateTime2.isBefore(today);
+            boolean isDateTime1BeforeToday = dateTime1.isBefore(today);
+            boolean isDateTime2BeforeToday = dateTime2.isBefore(today);
 
-                    // If both dates are before today, sort them normally
-                    if (isDateTime1BeforeToday && isDateTime2BeforeToday) {
-                        return dateTime1.compareTo(dateTime2);
-                    }
+            // If both dates are before today, sort them normally
+            if (isDateTime1BeforeToday && isDateTime2BeforeToday) {
+                return dateTime1.compareTo(dateTime2);
+            }
 
-                    // If only one date is before today, move it to the back
-                    if (isDateTime1BeforeToday) {
-                        return 1;
-                    } else if (isDateTime2BeforeToday) {
-                        return -1;
-                    }
+            // If only one date is before today, move it to the back
+            if (isDateTime1BeforeToday) {
+                return 1;
+            } else if (isDateTime2BeforeToday) {
+                return -1;
+            }
 
-                    // If both dates are after today, sort them normally
-                    return dateTime1.compareTo(dateTime2);
-                }
-        ));
+            // If both dates are after today, sort them normally
+            return dateTime1.compareTo(dateTime2);
+        }));
 
         return sessionResponses;
+    }
+
+    public SessionResponse getSessionByIdWithCreatorName(String sessionId) {
+        Session session = sessionRepository.findById(sessionId).orElseThrow();
+        User creator = userRepository.findById(session.getCreatorId()).orElseThrow();
+
+        return SessionResponse.builder()
+                .id(session.getId())
+                .isActive(canAcceptVotes(session))
+                .name(session.getName())
+                .creatorName(creator.getName())
+                .lunchDate(session.getLunchDate())
+                .winningRestaurantName(session.getWinningRestaurantName())
+                .build();
     }
 
     public Session createSession(String name, LocalDateTime lunchDate, String creatorId) {

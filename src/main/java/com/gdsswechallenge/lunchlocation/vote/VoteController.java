@@ -18,13 +18,24 @@ public class VoteController {
     @PostMapping
     public ResponseEntity<?> castVote(@RequestHeader(name = "Authorization") String token, @RequestBody CastVoteRequest castVoteRequest) {
         String creatorId = jwtService.extractUserId(token);
-        System.out.println(castVoteRequest.toString() + " : " + creatorId);
 
        Optional<Vote> vote = voteService.castVote(creatorId, castVoteRequest.getSessionId(), castVoteRequest.getRestaurantName());
 
        if(vote.isEmpty()) {
            return ResponseEntity.badRequest().build();
        }
+        return ResponseEntity.ok().body(vote);
+    }
+
+    @GetMapping("/{sessionId}")
+    public ResponseEntity<?> getVote(@RequestHeader(name = "Authorization") String token, @PathVariable String sessionId) {
+        String creatorId = jwtService.extractUserId(token);
+
+        Optional<Vote> vote = voteService.getVote(creatorId, sessionId);
+
+        if(vote.isEmpty()) {
+            return ResponseEntity.ok().build();
+        }
         return ResponseEntity.ok().body(vote);
     }
 }

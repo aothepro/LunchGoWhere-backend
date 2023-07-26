@@ -1,6 +1,7 @@
 package com.gdsswechallenge.lunchlocation.session;
 
 import com.gdsswechallenge.lunchlocation.config.JwtService;
+import com.gdsswechallenge.lunchlocation.vote.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +15,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SessionController {
     private final SessionService sessionService;
+    private final VoteService voteService;
     private final JwtService jwtService;
 
     @GetMapping
     public ResponseEntity<List<SessionResponse>> getAllSessions() {
         List<SessionResponse> sessions = sessionService.getAllSessions();
         return ResponseEntity.ok(sessions);
+    }
+
+    @GetMapping("/{sessionId}")
+    public ResponseEntity<SessionResponse> getSessions(@PathVariable String sessionId) {
+        SessionResponse sessionresponse = sessionService.getSessionByIdWithCreatorName(sessionId);
+        return ResponseEntity.ok(sessionresponse);
     }
 
     @PostMapping("/create")
