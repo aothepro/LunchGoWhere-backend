@@ -17,8 +17,9 @@ public class SessionController {
     private final JwtService jwtService;
 
     @GetMapping
-    public ResponseEntity<List<Session>> getActiveSessions() {
-        return ResponseEntity.ok(sessionService.getAllActiveSessions());
+    public ResponseEntity<List<SessionResponse>> getAllSessions() {
+        List<SessionResponse> sessions = sessionService.getAllSessions();
+        return ResponseEntity.ok(sessions);
     }
 
     @PostMapping("/create")
@@ -42,7 +43,7 @@ public class SessionController {
         String requesterId = jwtService.extractUserId(token);
         Optional<Session> session = sessionService.endSessionWithId(sessionEndRequest.getSessionId(), requesterId);
 
-        if (session.isEmpty()){
+        if (session.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(session.get());
