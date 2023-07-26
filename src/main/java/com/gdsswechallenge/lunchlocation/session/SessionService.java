@@ -89,7 +89,7 @@ public class SessionService {
     public Optional<Session> endSessionWithId(String sessionId, String requesterId) {
         Optional<Session> session = sessionRepository.findById(sessionId);
 
-        if (session.isEmpty() || session.get().getCreatorId() != requesterId) {
+        if (session.isEmpty() || !session.get().getCreatorId().equals(requesterId)) {
             return Optional.empty();
         }
 
