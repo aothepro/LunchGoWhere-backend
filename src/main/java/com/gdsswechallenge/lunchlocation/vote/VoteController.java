@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,6 +25,12 @@ public class VoteController {
        if(vote.isEmpty()) {
            return ResponseEntity.badRequest().build();
        }
+        return ResponseEntity.ok().body(vote);
+    }
+
+    @GetMapping("/{sessionId}/all")
+    public ResponseEntity<List<VotesWithUsernameResponse>> getAllVotesBySessionIdWithCreatorName( @PathVariable String sessionId) {
+        List<VotesWithUsernameResponse> vote = voteService.getAllVoteBySessionId( sessionId);
         return ResponseEntity.ok().body(vote);
     }
 
