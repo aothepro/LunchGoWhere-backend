@@ -18,4 +18,5 @@ public class SessionResponse {
     private String creatorName;
     private boolean isActive;
     private String winningRestaurantName;
+    private boolean isCreator;
 }

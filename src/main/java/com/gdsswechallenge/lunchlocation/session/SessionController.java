@@ -25,8 +25,9 @@ public class SessionController {
     }
 
     @GetMapping("/{sessionId}")
-    public ResponseEntity<SessionResponse> getSessions(@PathVariable String sessionId) {
-        SessionResponse sessionresponse = sessionService.getSessionByIdWithCreatorName(sessionId);
+    public ResponseEntity<SessionResponse> getSessions(@RequestHeader(name = "Authorization") String token, @PathVariable String sessionId) {
+        String requesterId = jwtService.extractUserId(token);
+        SessionResponse sessionresponse = sessionService.getSessionByIdWithCreatorName(sessionId,requesterId);
         return ResponseEntity.ok(sessionresponse);
     }
 

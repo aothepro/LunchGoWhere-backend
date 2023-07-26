@@ -53,7 +53,7 @@ public class SessionService {
         return sessionResponses;
     }
 
-    public SessionResponse getSessionByIdWithCreatorName(String sessionId) {
+    public SessionResponse getSessionByIdWithCreatorName(String sessionId, String requesterId) {
         Session session = sessionRepository.findById(sessionId).orElseThrow();
         User creator = userRepository.findById(session.getCreatorId()).orElseThrow();
 
@@ -64,6 +64,7 @@ public class SessionService {
                 .creatorName(creator.getName())
                 .lunchDate(session.getLunchDate())
                 .winningRestaurantName(session.getWinningRestaurantName())
+                .isCreator(session.getCreatorId().equals(requesterId))
                 .build();
     }
 
