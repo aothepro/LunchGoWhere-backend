@@ -34,7 +34,7 @@ public class LunchlocationApplication {
             });
 
             // Create a user and use it to create 3 sessions
-            User sessionCreatorUser = User.builder().name("SessionCreator757").username("sessioncreator757").password(passwordEncoder.encode("123456")).build();
+            User sessionCreatorUser = User.builder().name("SessionCreator").username("sessioncreator").password(passwordEncoder.encode("sessioncreator")).build();
             userRepository.findByUsername(sessionCreatorUser.getUsername()).ifPresentOrElse(u -> {
                 System.out.println(u + " already exist");
             }, () -> {
