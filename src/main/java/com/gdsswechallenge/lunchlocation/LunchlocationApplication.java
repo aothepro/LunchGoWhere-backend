@@ -4,6 +4,7 @@ import com.gdsswechallenge.lunchlocation.session.Session;
 import com.gdsswechallenge.lunchlocation.session.SessionRepository;
 import com.gdsswechallenge.lunchlocation.user.User;
 import com.gdsswechallenge.lunchlocation.user.UserRepository;
+import com.gdsswechallenge.lunchlocation.vote.VoteRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,9 +21,11 @@ public class LunchlocationApplication {
     }
 
     @Bean
-    CommandLineRunner runner(UserRepository userRepository, PasswordEncoder passwordEncoder, SessionRepository sessionRepository) {
+    CommandLineRunner runner(UserRepository userRepository, PasswordEncoder passwordEncoder, SessionRepository sessionRepository, VoteRepository voteRepository) {
         userRepository.deleteAll();
         sessionRepository.deleteAll();
+        voteRepository.deleteAll();
+
         // Initialize tester users and seed data
         return args -> {
             // Create a test user
